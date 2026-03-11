@@ -1,0 +1,663 @@
+[
+  {
+    "name": "Sarah Chen",
+    "headline": "Director, Capital Markets at RBC | CFA Charterholder",
+    "currentCompany": "RBC",
+    "location": "Toronto, Ontario, Canada",
+    "connectionCount": 500,
+    "is500Plus": true,
+    "connectionDegree": 2,
+    "mutualConnections": 8,
+    "education": {
+      "isAlumni": true,
+      "schoolMatch": "University of Waterloo"
+    },
+    "activity": {
+      "hasRecentActivity": true,
+      "mostRecentPost": "2d",
+      "activityType": "post"
+    },
+    "hiringSignals": {
+      "hasHiringSignals": true,
+      "matchedKeywords": [
+        "hiring",
+        "join my team"
+      ]
+    },
+    "profileUrl": "https://www.linkedin.com/in/sarahchen-cm",
+    "extractedAt": "2025-05-10T14:30:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "medium"
+    },
+    "_description": "HIGH: Director at target company, alumni, active, hiring"
+  },
+  {
+    "name": "Michael Patel",
+    "headline": "Senior Manager, Risk Analytics at TD Bank | FRM",
+    "currentCompany": "TD",
+    "location": "Toronto, Ontario, Canada",
+    "connectionCount": 423,
+    "is500Plus": false,
+    "connectionDegree": 2,
+    "mutualConnections": 12,
+    "education": {
+      "isAlumni": true,
+      "schoolMatch": "University of Waterloo"
+    },
+    "activity": {
+      "hasRecentActivity": true,
+      "mostRecentPost": "1w",
+      "activityType": "repost"
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/michaelpatel-risk",
+    "extractedAt": "2025-05-10T14:31:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "medium"
+    },
+    "_description": "HIGH: VP at target company, alumni, many mutuals"
+  },
+  {
+    "name": "Jessica Wong",
+    "headline": "VP, Investment Banking at CIBC Capital Markets",
+    "currentCompany": "CIBC",
+    "location": "Toronto, Ontario, Canada",
+    "connectionCount": 500,
+    "is500Plus": true,
+    "connectionDegree": 2,
+    "mutualConnections": 5,
+    "education": {
+      "isAlumni": true,
+      "schoolMatch": "University of Waterloo"
+    },
+    "activity": {
+      "hasRecentActivity": true,
+      "mostRecentPost": "3d",
+      "activityType": "article"
+    },
+    "hiringSignals": {
+      "hasHiringSignals": true,
+      "matchedKeywords": [
+        "open role"
+      ]
+    },
+    "profileUrl": "https://www.linkedin.com/in/jessicawong-ib",
+    "extractedAt": "2025-05-10T14:32:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "medium"
+    },
+    "_description": "HIGH: Senior Manager at Big 4, hiring signals, active poster"
+  },
+  {
+    "name": "David Kim",
+    "headline": "Manager, Financial Advisory at Deloitte Canada",
+    "currentCompany": "Deloitte",
+    "location": "Toronto, Ontario, Canada",
+    "connectionCount": 500,
+    "is500Plus": true,
+    "connectionDegree": 1,
+    "mutualConnections": 22,
+    "education": {
+      "isAlumni": true,
+      "schoolMatch": "University of Waterloo"
+    },
+    "activity": {
+      "hasRecentActivity": true,
+      "mostRecentPost": "5d",
+      "activityType": "post"
+    },
+    "hiringSignals": {
+      "hasHiringSignals": true,
+      "matchedKeywords": [
+        "hiring",
+        "#hiring"
+      ]
+    },
+    "profileUrl": "https://www.linkedin.com/in/davidkim-fa",
+    "extractedAt": "2025-05-10T14:33:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "high"
+    },
+    "_description": "HIGH: Manager at target company, 1st degree, alumni"
+  },
+  {
+    "name": "Emily Rodriguez",
+    "headline": "Director, Equity Research — Technology Sector at BMO Capital Markets",
+    "currentCompany": "BMO",
+    "location": "Toronto, Ontario, Canada",
+    "connectionCount": 387,
+    "is500Plus": false,
+    "connectionDegree": 2,
+    "mutualConnections": 6,
+    "education": {
+      "isAlumni": true,
+      "schoolMatch": "University of Waterloo"
+    },
+    "activity": {
+      "hasRecentActivity": true,
+      "mostRecentPost": "1d",
+      "activityType": "post"
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/emilyrodriguez-er",
+    "extractedAt": "2025-05-10T14:34:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "medium"
+    },
+    "_description": "HIGH: Director at pension fund, many mutuals, recent activity"
+  },
+  {
+    "name": "Alex Tran",
+    "headline": "Financial Analyst at Manulife | University of Waterloo Grad",
+    "currentCompany": "Manulife",
+    "location": "Waterloo, Ontario, Canada",
+    "connectionCount": 214,
+    "is500Plus": false,
+    "connectionDegree": 2,
+    "mutualConnections": 3,
+    "education": {
+      "isAlumni": true,
+      "schoolMatch": "University of Waterloo"
+    },
+    "activity": {
+      "hasRecentActivity": false,
+      "mostRecentPost": "3mo",
+      "activityType": null
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/alextran-fa",
+    "extractedAt": "2025-05-10T14:35:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "medium"
+    },
+    "_description": "MEDIUM: Analyst at target company, not alumni, some activity"
+  },
+  {
+    "name": "Rachel Kim",
+    "headline": "Senior Associate, Portfolio Management at Sun Life",
+    "currentCompany": "Sun Life",
+    "location": "Toronto, Ontario, Canada",
+    "connectionCount": 312,
+    "is500Plus": false,
+    "connectionDegree": 3,
+    "mutualConnections": 1,
+    "education": {
+      "isAlumni": false,
+      "schoolMatch": null
+    },
+    "activity": {
+      "hasRecentActivity": true,
+      "mostRecentPost": "2w",
+      "activityType": "repost"
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/rachelkim-pm",
+    "extractedAt": "2025-05-10T14:36:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "medium"
+    },
+    "_description": "MEDIUM: Manager at non-target company, alumni, no activity"
+  },
+  {
+    "name": "Marcus Oliveira",
+    "headline": "Recruiter — Banking & Finance at Robert Half",
+    "currentCompany": "Robert Half",
+    "location": "Toronto, Ontario, Canada",
+    "connectionCount": 500,
+    "is500Plus": true,
+    "connectionDegree": 2,
+    "mutualConnections": 0,
+    "education": {
+      "isAlumni": false,
+      "schoolMatch": null
+    },
+    "activity": {
+      "hasRecentActivity": true,
+      "mostRecentPost": "1d",
+      "activityType": "post"
+    },
+    "hiringSignals": {
+      "hasHiringSignals": true,
+      "matchedKeywords": [
+        "open role",
+        "hiring"
+      ]
+    },
+    "profileUrl": "https://www.linkedin.com/in/marcusoliveira-rec",
+    "extractedAt": "2025-05-10T14:37:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "high"
+    },
+    "_description": "MEDIUM: Senior Associate at Big 4, right location, some mutuals"
+  },
+  {
+    "name": "Priya Sharma",
+    "headline": "Manager, Compliance at Scotiabank",
+    "currentCompany": "Scotiabank",
+    "location": "Toronto, Ontario, Canada",
+    "connectionCount": 278,
+    "is500Plus": false,
+    "connectionDegree": 2,
+    "mutualConnections": 4,
+    "education": {
+      "isAlumni": false,
+      "schoolMatch": null
+    },
+    "activity": {
+      "hasRecentActivity": true,
+      "mostRecentPost": "2mo",
+      "activityType": "post"
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/priyasharma-comp",
+    "extractedAt": "2025-05-10T14:38:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "medium"
+    },
+    "_description": "MEDIUM: Recruiter in finance, hiring signals, right location"
+  },
+  {
+    "name": "James O'Connor",
+    "headline": "Credit Risk Analyst at CPP Investments",
+    "currentCompany": "CPP Investments",
+    "location": "Toronto, Ontario, Canada",
+    "connectionCount": 156,
+    "is500Plus": false,
+    "connectionDegree": 2,
+    "mutualConnections": 2,
+    "education": {
+      "isAlumni": true,
+      "schoolMatch": "University of Waterloo"
+    },
+    "activity": {
+      "hasRecentActivity": false,
+      "mostRecentPost": null,
+      "activityType": null
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/jamesoconnor-cr",
+    "extractedAt": "2025-05-10T14:39:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "low"
+    },
+    "_description": "MEDIUM: Director but wrong location, alumni, minimal signals"
+  },
+  {
+    "name": "Taylor Brooks",
+    "headline": "Marketing Coordinator at Shopify",
+    "currentCompany": "Shopify",
+    "location": "Ottawa, Ontario, Canada",
+    "connectionCount": 89,
+    "is500Plus": false,
+    "connectionDegree": 3,
+    "mutualConnections": 0,
+    "education": {
+      "isAlumni": false,
+      "schoolMatch": null
+    },
+    "activity": {
+      "hasRecentActivity": false,
+      "mostRecentPost": "1yr",
+      "activityType": null
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/taylorbrooks-mkt",
+    "extractedAt": "2025-05-10T14:40:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "low"
+    },
+    "_description": "LOW: Intern at target company, no alumni, no activity"
+  },
+  {
+    "name": "Chris Anderson",
+    "headline": "Software Engineer at Google",
+    "currentCompany": "Google",
+    "location": "Mountain View, California, United States",
+    "connectionCount": 500,
+    "is500Plus": true,
+    "connectionDegree": 3,
+    "mutualConnections": 0,
+    "education": {
+      "isAlumni": false,
+      "schoolMatch": null
+    },
+    "activity": {
+      "hasRecentActivity": true,
+      "mostRecentPost": "4d",
+      "activityType": "post"
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/chrisanderson-swe",
+    "extractedAt": "2025-05-10T14:41:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "medium"
+    },
+    "_description": "LOW: Unrelated industry, wrong location, 3rd degree"
+  },
+  {
+    "name": "Jordan Lee",
+    "headline": "Student at University of Waterloo — Seeking Internship",
+    "currentCompany": null,
+    "location": "Waterloo, Ontario, Canada",
+    "connectionCount": 42,
+    "is500Plus": false,
+    "connectionDegree": 2,
+    "mutualConnections": 15,
+    "education": {
+      "isAlumni": true,
+      "schoolMatch": "University of Waterloo"
+    },
+    "activity": {
+      "hasRecentActivity": false,
+      "mostRecentPost": null,
+      "activityType": null
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/jordanlee-student",
+    "extractedAt": "2025-05-10T14:42:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "low",
+      "location": "high",
+      "education": "high",
+      "activity": "low"
+    },
+    "_description": "LOW: Empty/minimal profile, low confidence extractions"
+  },
+  {
+    "name": "Ashley Williams",
+    "headline": "Barista at Starbucks",
+    "currentCompany": "Starbucks",
+    "location": "Vancouver, British Columbia, Canada",
+    "connectionCount": 23,
+    "is500Plus": false,
+    "connectionDegree": 3,
+    "mutualConnections": 0,
+    "education": {
+      "isAlumni": false,
+      "schoolMatch": null
+    },
+    "activity": {
+      "hasRecentActivity": false,
+      "mostRecentPost": null,
+      "activityType": null
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/ashleywilliams-van",
+    "extractedAt": "2025-05-10T14:43:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "low",
+      "activity": "low"
+    },
+    "_description": "LOW: Student, no experience, 3rd degree, far location"
+  },
+  {
+    "name": "Unknown Person",
+    "headline": "",
+    "currentCompany": null,
+    "location": null,
+    "connectionCount": null,
+    "is500Plus": false,
+    "connectionDegree": 3,
+    "mutualConnections": 0,
+    "education": {
+      "isAlumni": false,
+      "schoolMatch": null
+    },
+    "activity": {
+      "hasRecentActivity": false,
+      "mostRecentPost": null,
+      "activityType": null
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/unknownperson",
+    "extractedAt": "2025-05-10T14:44:00.000Z",
+    "confidence": {
+      "name": "low",
+      "headline": "low",
+      "company": "low",
+      "location": "low",
+      "education": "low",
+      "activity": "low"
+    },
+    "_description": "LOW: Retired, old activity, not in target industry"
+  },
+  {
+    "_description": "EDGE: Completely empty profile — all nulls",
+    "name": "",
+    "headline": "",
+    "currentCompany": null,
+    "location": null,
+    "connectionCount": null,
+    "is500Plus": false,
+    "connectionDegree": null,
+    "mutualConnections": 0,
+    "education": {
+      "isAlumni": false,
+      "schoolMatch": null
+    },
+    "activity": {
+      "hasRecentActivity": false,
+      "mostRecentPost": null,
+      "activityType": null
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/empty-mock",
+    "extractedAt": "2025-05-15T10:50:00.000Z",
+    "confidence": {
+      "name": "low",
+      "headline": "low",
+      "company": "low",
+      "location": "low",
+      "education": "low",
+      "activity": "low"
+    }
+  },
+  {
+    "_description": "EDGE: No role match, but only alumni connection",
+    "name": "Pat Alumni",
+    "headline": "Graphic Designer at Spotify",
+    "currentCompany": "Spotify",
+    "location": "Toronto, Ontario, Canada",
+    "connectionCount": 200,
+    "is500Plus": false,
+    "connectionDegree": 2,
+    "mutualConnections": 6,
+    "education": {
+      "isAlumni": true,
+      "schoolMatch": "University of Waterloo"
+    },
+    "activity": {
+      "hasRecentActivity": false,
+      "mostRecentPost": null,
+      "activityType": null
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/pat-alumni-mock",
+    "extractedAt": "2025-05-15T10:51:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "low"
+    }
+  },
+  {
+    "_description": "EDGE: No role match, but strong hiring signals only",
+    "name": "Kim Recruiter",
+    "headline": "People Operations Lead at Shopify",
+    "currentCompany": "Shopify",
+    "location": "Toronto, Ontario, Canada",
+    "connectionCount": 500,
+    "is500Plus": true,
+    "connectionDegree": 3,
+    "mutualConnections": 0,
+    "education": {
+      "isAlumni": false,
+      "schoolMatch": null
+    },
+    "activity": {
+      "hasRecentActivity": true,
+      "mostRecentPost": "1d",
+      "activityType": "post"
+    },
+    "hiringSignals": {
+      "hasHiringSignals": true,
+      "matchedKeywords": [
+        "hiring",
+        "open role",
+        "join my team"
+      ]
+    },
+    "profileUrl": "https://www.linkedin.com/in/kim-recruiter-mock",
+    "extractedAt": "2025-05-15T10:52:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "medium"
+    }
+  },
+  {
+    "_description": "EDGE: Headline with no relevant keywords at all",
+    "name": "Sam Unrelated",
+    "headline": "Yoga Instructor and Mindfulness Coach",
+    "currentCompany": "Self-Employed",
+    "location": "Vancouver, British Columbia, Canada",
+    "connectionCount": 50,
+    "is500Plus": false,
+    "connectionDegree": 3,
+    "mutualConnections": 0,
+    "education": {
+      "isAlumni": false,
+      "schoolMatch": null
+    },
+    "activity": {
+      "hasRecentActivity": true,
+      "mostRecentPost": "2w",
+      "activityType": "post"
+    },
+    "hiringSignals": {
+      "hasHiringSignals": false,
+      "matchedKeywords": []
+    },
+    "profileUrl": "https://www.linkedin.com/in/sam-unrelated-mock",
+    "extractedAt": "2025-05-15T10:53:00.000Z",
+    "confidence": {
+      "name": "high",
+      "headline": "high",
+      "company": "high",
+      "location": "high",
+      "education": "high",
+      "activity": "medium"
+    }
+  }
+]

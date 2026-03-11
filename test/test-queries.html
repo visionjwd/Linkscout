@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LinkScout — Query Generator Tests</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      color: #2D2D2D;
+      background: #F9FAFB;
+      padding: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 20px; margin-bottom: 4px; }
+    .subtitle { font-size: 13px; color: #6B7280; margin-bottom: 24px; }
+    h2 { font-size: 16px; margin: 24px 0 12px 0; color: #2D2D2D; }
+
+    .config-box {
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      font-family: 'SF Mono', Consolas, monospace;
+      white-space: pre-wrap;
+      color: #374151;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    th {
+      background: #F3F4F6;
+      text-align: left;
+      padding: 10px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6B7280;
+      border-bottom: 1px solid #E5E7EB;
+    }
+    td {
+      padding: 10px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #F3F4F6;
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+
+    .strategy-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .strategy-badge--direct_role { background: #EFF6FF; color: #1D4ED8; }
+    .strategy-badge--seniority_vertical { background: #F0FDF4; color: #166534; }
+    .strategy-badge--alumni { background: #FDF4FF; color: #7E22CE; }
+    .strategy-badge--hiring_signal { background: #FEF2F2; color: #991B1B; }
+    .strategy-badge--adjacent { background: #FFF7ED; color: #9A3412; }
+    .strategy-badge--recruiter { background: #F0F9FF; color: #0369A1; }
+
+    .url-cell {
+      max-width: 360px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: 'SF Mono', Consolas, monospace;
+      font-size: 11px;
+    }
+    .url-cell a { color: #0A66C2; text-decoration: none; }
+    .url-cell a:hover { text-decoration: underline; }
+
+    .word-count { font-weight: 600; text-align: center; }
+    .word-count--ok { color: #059669; }
+    .word-count--over { color: #DC2626; }
+
+    .validation {
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .validation__row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 13px;
+    }
+    .validation__icon { font-size: 16px; }
+    .validation__pass { color: #059669; }
+    .validation__fail { color: #DC2626; }
+
+    .run-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0 8px 0;
+    }
+    .run-header h3 { font-size: 14px; }
+    .run-header .count { font-size: 12px; color: #6B7280; }
+
+    .btn {
+      display: inline-block;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      background: #0A66C2;
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .btn:hover { background: #004182; }
+  </style>
+</head>
+<body>
+
+  <h1>Query Generator Tests</h1>
+  <p class="subtitle">Tests for lib/query-generator.js — validates strategy coverage, word count limits, and URL formatting.</p>
+
+  <h2>Test Configuration</h2>
+  <div class="config-box" id="config-display"></div>
+
+  <button class="btn" id="btn-rerun">Re-run (check randomization)</button>
+
+  <div id="output"></div>
+
+  <script type="module">
+    import { generateSearchQueries } from '../lib/query-generator.js';
+    import {
+      MAX_KEYWORDS_WORDS,
+      LINKEDIN_SEARCH_BASE,
+      STRATEGY_DIRECT_ROLE,
+      STRATEGY_SENIORITY_VERTICAL,
+      STRATEGY_ALUMNI,
+      STRATEGY_HIRING_SIGNAL,
+      STRATEGY_ADJACENT,
+      STRATEGY_RECRUITER
+    } from '../lib/constants.js';
+
+    /** @type {Object} Sample configuration matching the spec's test scenario. */
+    const TEST_CONFIG = {
+      targetRoles: ['Financial Analyst', 'Capital Markets Analyst', 'Risk Analyst'],
+      targetCompanies: ['RBC', 'TD', 'CIBC', 'BMO', 'PwC', 'KPMG'],
+      targetLocation: 'Greater Toronto Area',
+      targetSeniority: ['Manager', 'Director', 'Senior Manager'],
+      userSchool: 'University of Waterloo',
+      includeRemote: true
+    };
+
+    const ALL_STRATEGIES = [
+      STRATEGY_DIRECT_ROLE,
+      STRATEGY_SENIORITY_VERTICAL,
+      STRATEGY_ALUMNI,
+      STRATEGY_HIRING_SIGNAL,
+      STRATEGY_ADJACENT,
+      STRATEGY_RECRUITER
+    ];
+
+    /**
+     * Extract the raw keyword string from a LinkedIn search URL.
+     * @param {string} url - Full LinkedIn search URL.
+     * @returns {string} Decoded keyword string.
+     */
+    function extractKeywords(url) {
+      try {
+        const parsed = new URL(url);
+        return decodeURIComponent(parsed.searchParams.get('keywords') || '');
+      } catch (_e) {
+        return '(invalid URL)';
+      }
+    }
+
+    /**
+     * Count words in a keyword string.
+     * @param {string} keywords - Keyword string.
+     * @returns {number}
+     */
+    function wordCount(keywords) {
+      return keywords.split(/\s+/).filter(Boolean).length;
+    }
+
+    /**
+     * Run a single test generation and return structured results.
+     * @param {number} sessionId - Session ID for rotation.
+     * @returns {Object}
+     */
+    function runTest(sessionId) {
+      const queries = generateSearchQueries(TEST_CONFIG, sessionId);
+      const results = queries.map((q) => {
+        const kw = extractKeywords(q.url);
+        const wc = wordCount(kw);
+        return { ...q, keywords: kw, wordCount: wc };
+      });
+
+      const strategies = new Set(results.map((r) => r.strategy));
+      const overLimit = results.filter((r) => r.wordCount > MAX_KEYWORDS_WORDS);
+      const urls = results.map((r) => r.url);
+      const duplicates = urls.filter((u, i) => urls.indexOf(u) !== i);
+      const allValid = results.every((r) => r.url.startsWith(LINKEDIN_SEARCH_BASE));
+
+      return {
+        queries: results,
+        validations: {
+          countOk: results.length >= 6 && results.length <= 9,
+          count: results.length,
+          allStrategies: ALL_STRATEGIES.every((s) => strategies.has(s)),
+          missingStrategies: ALL_STRATEGIES.filter((s) => !strategies.has(s)),
+          noOverLimit: overLimit.length === 0,
+          overLimitQueries: overLimit,
+          noDuplicates: duplicates.length === 0,
+          duplicateCount: duplicates.length,
+          allValidUrls: allValid
+        }
+      };
+    }
+
+    /**
+     * Render a single test run into HTML.
+     * @param {Object} run - Test run results.
+     * @param {number} runNumber - Run index for display.
+     * @returns {string} HTML string.
+     */
+    function renderRun(run, runNumber) {
+      const v = run.validations;
+
+      let html = '';
+
+      html += `<div class="run-header">
+        <h3>Run ${runNumber}</h3>
+        <span class="count">${v.count} queries generated</span>
+      </div>`;
+
+      /* Validation checks */
+      html += '<div class="validation">';
+
+      const checks = [
+        { pass: v.countOk, text: `Query count: ${v.count} (expected 6–9)` },
+        { pass: v.noOverLimit, text: v.noOverLimit
+            ? `All keywords ≤ ${MAX_KEYWORDS_WORDS} words`
+            : `${v.overLimitQueries.length} queries exceed ${MAX_KEYWORDS_WORDS} words: ${v.overLimitQueries.map((q) => '"' + q.keywords + '" (' + q.wordCount + ')').join(', ')}` },
+        { pass: v.allStrategies, text: v.allStrategies
+            ? 'All 6 strategy categories represented'
+            : `Missing strategies: ${v.missingStrategies.join(', ')}` },
+        { pass: v.allValidUrls, text: 'All URLs are valid LinkedIn search URLs' },
+        { pass: v.noDuplicates, text: v.noDuplicates
+            ? 'No duplicate URLs'
+            : `${v.duplicateCount} duplicate URL(s) found` }
+      ];
+
+      for (const check of checks) {
+        const cls = check.pass ? 'validation__pass' : 'validation__fail';
+        const icon = check.pass ? '✓' : '✗';
+        html += `<div class="validation__row ${cls}">
+          <span class="validation__icon">${icon}</span>
+          <span>${check.text}</span>
+        </div>`;
+      }
+      html += '</div>';
+
+      /* Query table */
+      html += `<table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Label</th>
+            <th>Strategy</th>
+            <th>Keywords</th>
+            <th>Words</th>
+            <th>URL</th>
+          </tr>
+        </thead>
+        <tbody>`;
+
+      for (let i = 0; i < run.queries.length; i++) {
+        const q = run.queries[i];
+        const wcClass = q.wordCount <= MAX_KEYWORDS_WORDS ? 'word-count--ok' : 'word-count--over';
+        html += `<tr>
+          <td>${i + 1}</td>
+          <td>${q.label}</td>
+          <td><span class="strategy-badge strategy-badge--${q.strategy}">${q.strategy}</span></td>
+          <td>${q.keywords}</td>
+          <td class="word-count ${wcClass}">${q.wordCount}</td>
+          <td class="url-cell"><a href="${q.url}" target="_blank" rel="noopener">${q.url}</a></td>
+        </tr>`;
+      }
+
+      html += '</tbody></table>';
+      return html;
+    }
+
+    /**
+     * Run all tests and render output.
+     */
+    function runAllTests() {
+      const output = document.getElementById('output');
+      let html = '<h2>Test Runs</h2>';
+
+      /* Run 3 times to verify randomization */
+      const adjacentLabels = [];
+      for (let i = 0; i < 3; i++) {
+        const run = runTest(i);
+        html += renderRun(run, i + 1);
+
+        const adj = run.queries.find((q) => q.strategy === STRATEGY_ADJACENT);
+        if (adj) {
+          adjacentLabels.push(adj.label);
+        }
+      }
+
+      /* Randomization check */
+      const uniqueAdjacent = new Set(adjacentLabels);
+      html += '<h2>Randomization Check</h2>';
+      html += '<div class="validation">';
+      html += `<div class="validation__row">
+        <span class="validation__icon">🎲</span>
+        <span>Adjacent role labels across 3 runs: ${adjacentLabels.map((l) => '"' + l + '"').join(', ')}</span>
+      </div>`;
+      html += `<div class="validation__row ${uniqueAdjacent.size > 1 ? 'validation__pass' : 'validation__fail'}">
+        <span class="validation__icon">${uniqueAdjacent.size > 1 ? '✓' : '⚠'}</span>
+        <span>${uniqueAdjacent.size} unique value(s) — ${uniqueAdjacent.size > 1 ? 'randomization confirmed' : 'may need more runs to see variation (random can repeat)'}</span>
+      </div>`;
+      html += '</div>';
+
+      output.innerHTML = html;
+    }
+
+    /* Display test config */
+    document.getElementById('config-display').textContent = JSON.stringify(TEST_CONFIG, null, 2);
+
+    /* Initial run */
+    runAllTests();
+
+    /* Re-run button */
+    document.getElementById('btn-rerun').addEventListener('click', runAllTests);
+  </script>
+</body>
+</html>

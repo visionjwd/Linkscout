@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=400">
+  <title>LinkScout</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+  <!-- ===== HEADER BAR ===== -->
+  <header class="header" id="header">
+    <div class="header__left">
+      <span class="header__title">LinkScout</span>
+      <span class="header__version" id="header-version">v0.1.0</span>
+      <span class="debug-badge debug-badge--hidden" id="debug-badge">🐛 Debug</span>
+    </div>
+    <button class="header__toggle" id="btn-toggle-view" aria-label="Toggle settings">⚙</button>
+  </header>
+
+  <!-- ===== SETTINGS VIEW ===== -->
+  <div class="view view--active" id="view-settings">
+    <div class="scroll-area">
+
+      <!-- Section A: Target Roles -->
+      <section class="section">
+        <label class="section__label">Your Target Roles</label>
+        <div class="chip-group" id="chips-roles"></div>
+        <input
+          class="chip-input"
+          id="input-custom-role"
+          type="text"
+          placeholder="Add custom role..."
+          aria-label="Add custom role"
+        >
+      </section>
+
+      <!-- Section B: Target Companies -->
+      <section class="section">
+        <label class="section__label">Target Companies</label>
+        <div class="chip-group" id="chips-companies"></div>
+        <input
+          class="chip-input"
+          id="input-custom-company"
+          type="text"
+          placeholder="Add company..."
+          aria-label="Add company"
+        >
+      </section>
+
+      <!-- Section C: Your School -->
+      <section class="section">
+        <label class="section__label" for="input-school">Your School</label>
+        <input
+          class="text-input"
+          id="input-school"
+          type="text"
+          placeholder="e.g. University of Waterloo"
+          aria-label="Your school"
+        >
+      </section>
+
+      <!-- Section D: Target Location -->
+      <section class="section">
+        <label class="section__label" for="input-location">Target Location</label>
+        <input
+          class="text-input"
+          id="input-location"
+          type="text"
+          placeholder="e.g. Greater Toronto Area"
+          aria-label="Target location"
+        >
+        <label class="checkbox-row" id="label-remote">
+          <input class="checkbox" id="input-remote" type="checkbox">
+          <span class="checkbox-text">Include remote positions</span>
+        </label>
+      </section>
+
+      <!-- Section E: Seniority Targets -->
+      <section class="section">
+        <label class="section__label">Seniority Targets</label>
+        <div class="chip-group" id="chips-seniority"></div>
+      </section>
+
+      <!-- Section F: Session Limits -->
+      <section class="section">
+        <label class="section__label" for="input-max-profiles">Session Limits</label>
+        <div class="numeric-row">
+          <span class="numeric-label">Max profiles per scan:</span>
+          <input
+            class="numeric-input"
+            id="input-max-profiles"
+            type="number"
+            aria-label="Max profiles per scan"
+          >
+        </div>
+        <p class="hint">Recommended: 30–40. Higher values increase account risk.</p>
+      </section>
+
+      <!-- Debug Panel (hidden by default, shown when debug mode active) -->
+      <section class="section debug-panel debug-panel--hidden" id="debug-panel">
+        <label class="section__label">🐛 Debug Panel</label>
+        <div class="debug-info" id="debug-info">
+          <pre class="debug-pre" id="debug-state-pre">Loading...</pre>
+        </div>
+        <div class="debug-actions">
+          <button class="debug-btn" id="btn-inject-mock" type="button">Inject Mock Results</button>
+          <button class="debug-btn" id="btn-reset-storage" type="button">Reset All Storage</button>
+          <button class="debug-btn" id="btn-export-debug" type="button">Export Debug Log</button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Settings footer -->
+    <footer class="footer">
+      <button class="btn-primary" id="btn-save">Save &amp; Continue →</button>
+    </footer>
+    <div class="clear-data-row">
+      <button class="clear-data-btn" id="btn-clear-data" type="button">Clear All Scan Data</button>
+    </div>
+  </div>
+
+  <!-- ===== RESULTS VIEW ===== -->
+  <div class="view" id="view-results">
+
+    <!-- Scan Control Bar -->
+    <div class="scan-bar" id="scan-bar">
+      <div class="scan-bar__status" id="scan-status">
+        <span class="scan-dot scan-dot--idle" id="scan-dot"></span>
+        <span class="scan-bar__text" id="scan-status-text">Ready to scan</span>
+      </div>
+      <div class="scan-bar__actions">
+        <button class="scan-btn scan-btn--start" id="btn-scan" type="button">Start Scan</button>
+        <button class="scan-btn scan-btn--resume scan-btn--hidden" id="btn-resume" type="button">Resume</button>
+      </div>
+    </div>
+
+    <!-- Pause Warning Banner -->
+    <div class="pause-banner pause-banner--hidden" id="pause-banner">
+      <span class="pause-banner__text" id="pause-banner-text"></span>
+    </div>
+
+    <!-- Query Indicator -->
+    <div class="query-bar query-bar--hidden" id="query-bar">
+      <span class="query-bar__text" id="query-text"></span>
+    </div>
+
+    <!-- Daily Warning Banner -->
+    <div class="daily-warning daily-warning--hidden" id="daily-warning">
+      <span class="daily-warning__text">⚠ You've scanned 100+ profiles today. Continuing may increase account risk.</span>
+      <button class="daily-warning__btn" id="btn-dismiss-warning" type="button">I understand, continue</button>
+    </div>
+
+    <!-- Scrollable Results List -->
+    <div class="scroll-area scroll-area--results" id="results-scroll">
+
+      <!-- Export bar (shown when results exist) -->
+      <div class="export-bar export-bar--hidden" id="export-bar">
+        <button class="export-btn" id="btn-export" type="button">Export CSV ↓</button>
+      </div>
+
+      <!-- Empty state (shown when no results) -->
+      <div class="empty-state" id="empty-state">
+        <p class="empty-state__title">No profiles scanned yet.</p>
+        <p class="empty-state__sub">Configure your settings and start a scan to find networking targets.</p>
+      </div>
+
+      <!-- Results cards container -->
+      <div class="results-list" id="results-list"></div>
+
+    </div>
+
+    <!-- Summary Bar -->
+    <div class="summary-bar" id="summary-bar">
+      <span class="summary-bar__text" id="summary-text">0 profiles scanned · 0 scored 55+ · Session 0</span>
+    </div>
+  </div>
+
+  <!-- ===== CONFIRM DIALOG ===== -->
+  <div class="confirm-overlay confirm-overlay--hidden" id="confirm-overlay">
+    <div class="confirm-dialog">
+      <p class="confirm-dialog__text" id="confirm-text">Are you sure?</p>
+      <div class="confirm-dialog__actions">
+        <button class="confirm-btn confirm-btn--cancel" id="confirm-cancel" type="button">Cancel</button>
+        <button class="confirm-btn confirm-btn--danger" id="confirm-ok" type="button">Clear Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div class="toast" id="toast" aria-live="polite"></div>
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LinkScout — Scoring Engine Tests</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px; color: #2D2D2D; background: #F9FAFB;
+      padding: 24px; max-width: 1200px; margin: 0 auto;
+    }
+    h1 { font-size: 20px; margin-bottom: 4px; }
+    .subtitle { font-size: 13px; color: #6B7280; margin-bottom: 24px; }
+    h2 { font-size: 16px; margin: 24px 0 12px 0; }
+    .config-box {
+      background: #FFF; border: 1px solid #E5E7EB; border-radius: 6px;
+      padding: 16px; margin-bottom: 16px; font-size: 11px;
+      font-family: 'SF Mono', Consolas, monospace; white-space: pre-wrap; color: #374151;
+    }
+    table {
+      width: 100%; border-collapse: collapse; background: #FFF;
+      border: 1px solid #E5E7EB; border-radius: 6px; overflow: hidden; margin-bottom: 16px;
+    }
+    th {
+      background: #F3F4F6; text-align: left; padding: 8px 10px; font-size: 10px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+      color: #6B7280; border-bottom: 1px solid #E5E7EB; white-space: nowrap;
+    }
+    td { padding: 8px 10px; font-size: 12px; border-bottom: 1px solid #F3F4F6; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    .score { font-weight: 700; font-size: 14px; text-align: center; }
+    .tier-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 10px;
+      font-size: 10px; font-weight: 600; white-space: nowrap;
+    }
+    .tier--reach_out_today { background: #059669; color: #FFF; }
+    .tier--strong_candidate { background: #0A66C2; color: #FFF; }
+    .tier--worth_monitoring { background: #D97706; color: #FFF; }
+    .tier--archive { background: #9CA3AF; color: #FFF; }
+    .breakdown-cell { font-size: 10px; line-height: 1.6; }
+    .breakdown-cell span { white-space: nowrap; }
+    .dim-label { color: #6B7280; }
+    .dim-score { font-weight: 600; }
+    .signals-cell { font-size: 11px; line-height: 1.5; }
+    .conf-badge { font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 8px; }
+    .conf--high { background: #F0FDF4; color: #166534; }
+    .conf--medium { background: #FEF3C7; color: #92400E; }
+    .conf--low { background: #FEE2E2; color: #991B1B; }
+    .validation {
+      background: #FFF; border: 1px solid #E5E7EB; border-radius: 6px;
+      padding: 16px; margin-bottom: 16px;
+    }
+    .validation__row { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 13px; }
+    .vpass { color: #059669; }
+    .vfail { color: #DC2626; }
+    .desc-cell { max-width: 140px; font-size: 10px; color: #6B7280; }
+  </style>
+</head>
+<body>
+
+<h1>Scoring Engine Tests</h1>
+<p class="subtitle">Tests for lib/scoring.js — validates score ranges, tier assignment, breakdown sums, and edge cases.</p>
+
+<h2>Test Configuration</h2>
+<div class="config-box" id="config-display"></div>
+
+<div id="output"></div>
+
+<script type="module">
+  import { scoreProfile } from '../lib/scoring.js';
+  import {
+    TIER_REACH_OUT, TIER_STRONG, TIER_MONITOR, TIER_ARCHIVE,
+    MAX_ROLE_FIT, MAX_COMPANY_MATCH, MAX_ACTIVITY_HIRING,
+    MAX_APPROACHABILITY, MAX_CONNECTION_LEVERAGE, MAX_INTERACTION_BONUS
+  } from '../lib/constants.js';
+
+  const TEST_CONFIG = {
+    targetRoles: ['Financial Analyst', 'Capital Markets Analyst', 'Risk Analyst'],
+    targetCompanies: ['RBC', 'TD', 'CIBC', 'BMO', 'PwC', 'KPMG', 'Deloitte', 'EY', 'CPP Investments'],
+    targetLocation: 'Greater Toronto Area',
+    targetSeniority: ['Manager', 'Director', 'Senior Manager'],
+    userSchool: 'University of Waterloo'
+  };
+
+  document.getElementById('config-display').textContent = JSON.stringify(TEST_CONFIG, null, 2);
+
+  /** Load mock profiles via fetch. */
+  async function loadProfiles() {
+    const resp = await fetch('./mock-profiles.json');
+    return resp.json();
+  }
+
+  /** Run all tests. */
+  async function run() {
+    const profiles = await loadProfiles();
+    const results = profiles.map((p) => ({
+      profile: p,
+      result: scoreProfile(p, TEST_CONFIG)
+    }));
+
+    let html = '';
+
+    /* === Results Table === */
+    html += '<h2>All Profiles (' + results.length + ')</h2>';
+    html += '<table><thead><tr>';
+    html += '<th>#</th><th>Description</th><th>Name</th><th>Score</th><th>Tier</th>';
+    html += '<th>RF</th><th>CM</th><th>AH</th><th>AP</th><th>CL</th><th>IB</th><th>Sum</th>';
+    html += '<th>Top Signals</th><th>Conf</th>';
+    html += '</tr></thead><tbody>';
+
+    for (let i = 0; i < results.length; i++) {
+      const { profile: p, result: r } = results[i];
+      const b = r.breakdown;
+      const sum = b.roleFit.score + b.companyMatch.score + b.activityAndHiring.score
+        + b.approachability.score + b.connectionLeverage.score + b.interactionBonus.score;
+
+      html += '<tr>';
+      html += '<td>' + (i + 1) + '</td>';
+      html += '<td class="desc-cell">' + (p._description || '') + '</td>';
+      html += '<td>' + (p.name || '(empty)') + '</td>';
+      html += '<td class="score">' + r.totalScore + '</td>';
+      html += '<td><span class="tier-badge tier--' + r.tier + '">' + r.tier.replace(/_/g, ' ') + '</span></td>';
+      html += '<td>' + b.roleFit.score + '/' + b.roleFit.max + '</td>';
+      html += '<td>' + b.companyMatch.score + '/' + b.companyMatch.max + '</td>';
+      html += '<td>' + b.activityAndHiring.score + '/' + b.activityAndHiring.max + '</td>';
+      html += '<td>' + b.approachability.score + '/' + b.approachability.max + '</td>';
+      html += '<td>' + b.connectionLeverage.score + '/' + b.connectionLeverage.max + '</td>';
+      html += '<td>' + b.interactionBonus.score + '/' + b.interactionBonus.max + '</td>';
+      html += '<td class="dim-score">' + sum + '</td>';
+      html += '<td class="signals-cell">' + r.topSignals.join('<br>') + '</td>';
+      html += '<td><span class="conf-badge conf--' + r.overallConfidence + '">' + r.overallConfidence + '</span></td>';
+      html += '</tr>';
+    }
+    html += '</tbody></table>';
+
+    /* === Breakdown details (expandable reasoning) === */
+    html += '<h2>Detailed Breakdown (first 5 profiles)</h2>';
+    for (let i = 0; i < Math.min(5, results.length); i++) {
+      const { profile: p, result: r } = results[i];
+      const b = r.breakdown;
+      html += '<div class="config-box"><strong>' + p.name + ' (Score: ' + r.totalScore + ')</strong>\n';
+      for (const [dim, data] of Object.entries(b)) {
+        html += '\n[' + dim + '] ' + data.score + '/' + data.max + '\n';
+        for (const reason of data.reasons) {
+          html += '  • ' + reason + '\n';
+        }
+      }
+      html += '</div>';
+    }
+
+    /* === Validation Checks === */
+    html += '<h2>Validation Checks</h2><div class="validation">';
+
+    const checks = [];
+
+    /* 1. Score range 0-100 */
+    const allInRange = results.every((r) => r.result.totalScore >= 0 && r.result.totalScore <= 100);
+    checks.push({ pass: allInRange, text: 'All scores in 0–100 range' });
+
+    /* 2. Breakdown sums equal totalScore */
+    let sumErrors = 0;
+    for (const { result: r } of results) {
+      const b = r.breakdown;
+      const sum = b.roleFit.score + b.companyMatch.score + b.activityAndHiring.score
+        + b.approachability.score + b.connectionLeverage.score + b.interactionBonus.score;
+      if (sum !== r.totalScore) sumErrors++;
+    }
+    checks.push({ pass: sumErrors === 0, text: 'Breakdown sums equal totalScore for all profiles' + (sumErrors ? ' (' + sumErrors + ' mismatches)' : '') });
+
+    /* 3. Dimension caps respected */
+    const dimCaps = [
+      ['roleFit', MAX_ROLE_FIT], ['companyMatch', MAX_COMPANY_MATCH],
+      ['activityAndHiring', MAX_ACTIVITY_HIRING], ['approachability', MAX_APPROACHABILITY],
+      ['connectionLeverage', MAX_CONNECTION_LEVERAGE], ['interactionBonus', MAX_INTERACTION_BONUS]
+    ];
+    let capViolations = 0;
+    for (const { result: r } of results) {
+      for (const [dim, maxVal] of dimCaps) {
+        if (r.breakdown[dim].score > maxVal) capViolations++;
+      }
+    }
+    checks.push({ pass: capViolations === 0, text: 'All dimension scores within caps' + (capViolations ? ' (' + capViolations + ' violations)' : '') });
+
+    /* 4. HIGH-scoring mocks → reach_out or strong */
+    const highProfiles = results.filter((r) => r.profile._description && r.profile._description.startsWith('HIGH'));
+    const highOk = highProfiles.every((r) => r.result.tier === TIER_REACH_OUT || r.result.tier === TIER_STRONG);
+    checks.push({ pass: highOk, text: 'HIGH mocks score as reach_out_today or strong_candidate (' + highProfiles.length + ' profiles)' });
+
+    /* 5. LOW-scoring mocks → archive or worth_monitoring */
+    const lowProfiles = results.filter((r) => r.profile._description && r.profile._description.startsWith('LOW'));
+    const lowOk = lowProfiles.every((r) => r.result.tier === TIER_ARCHIVE || r.result.tier === TIER_MONITOR);
+    checks.push({ pass: lowOk, text: 'LOW mocks score as archive or worth_monitoring (' + lowProfiles.length + ' profiles)' });
+
+    /* 6. Empty profile → very low score */
+    const emptyProfile = results.find((r) => r.profile._description && r.profile._description.includes('empty'));
+    const emptyOk = emptyProfile && emptyProfile.result.totalScore <= 10;
+    checks.push({ pass: emptyOk, text: 'Empty profile scores ≤ 10 (got: ' + (emptyProfile ? emptyProfile.result.totalScore : 'N/A') + ')' });
+
+    /* 7. Empty profile → low confidence */
+    const emptyConfOk = emptyProfile && emptyProfile.result.overallConfidence === 'low';
+    checks.push({ pass: emptyConfOk, text: 'Empty profile has "low" confidence' });
+
+    /* 8. Alumni-only edge case → moderate score driven by leverage */
+    const alumniOnly = results.find((r) => r.profile._description && r.profile._description.includes('only alumni'));
+    if (alumniOnly) {
+      const leverageScore = alumniOnly.result.breakdown.connectionLeverage.score;
+      checks.push({ pass: leverageScore >= 8, text: 'Alumni-only: connection leverage ≥ 8 (got: ' + leverageScore + ')' });
+    }
+
+    /* 9. Hiring-only edge case → activity dimension is high */
+    const hiringOnly = results.find((r) => r.profile._description && r.profile._description.includes('hiring signals only'));
+    if (hiringOnly) {
+      const actScore = hiringOnly.result.breakdown.activityAndHiring.score;
+      checks.push({ pass: actScore >= 20, text: 'Hiring-only: activity+hiring ≥ 20 (got: ' + actScore + ')' });
+    }
+
+    /* 10. Unrelated headline → role fit 0 */
+    const unrelated = results.find((r) => r.profile._description && r.profile._description.includes('no relevant keywords'));
+    if (unrelated) {
+      const rf = unrelated.result.breakdown.roleFit.score;
+      checks.push({ pass: rf === 0, text: 'Unrelated headline: role fit = 0 (got: ' + rf + ')' });
+    }
+
+    /* 11. Every result has topSignals array */
+    const allHaveSignals = results.every((r) => Array.isArray(r.result.topSignals));
+    checks.push({ pass: allHaveSignals, text: 'All results have topSignals array' });
+
+    /* 12. Every result has valid tier */
+    const validTiers = [TIER_REACH_OUT, TIER_STRONG, TIER_MONITOR, TIER_ARCHIVE];
+    const allValidTiers = results.every((r) => validTiers.includes(r.result.tier));
+    checks.push({ pass: allValidTiers, text: 'All results have valid tier values' });
+
+    for (const check of checks) {
+      const cls = check.pass ? 'vpass' : 'vfail';
+      const icon = check.pass ? '✓' : '✗';
+      html += '<div class="validation__row ' + cls + '"><span>' + icon + '</span><span>' + check.text + '</span></div>';
+    }
+
+    html += '</div>';
+
+    document.getElementById('output').innerHTML = html;
+  }
+
+  run();
+</script>
+</body>
+</html>

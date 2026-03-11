@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!--
+    LinkScout Icon
+    Concept: Target/scope crosshair with an offset "found person" node dot.
+    Primary color: LinkedIn Blue #0A66C2
+  -->
+
+  <!-- Outer target ring -->
+  <circle cx="64" cy="64" r="48" fill="none" stroke="#0A66C2" stroke-width="7" />
+
+  <!-- Inner target ring -->
+  <circle cx="64" cy="64" r="24" fill="none" stroke="#0A66C2" stroke-width="5" />
+
+  <!-- Crosshair lines — top -->
+  <line x1="64" y1="4" x2="64" y2="32" stroke="#0A66C2" stroke-width="7" stroke-linecap="round" />
+  <!-- Crosshair lines — bottom -->
+  <line x1="64" y1="96" x2="64" y2="124" stroke="#0A66C2" stroke-width="7" stroke-linecap="round" />
+  <!-- Crosshair lines — left -->
+  <line x1="4" y1="64" x2="32" y2="64" stroke="#0A66C2" stroke-width="7" stroke-linecap="round" />
+  <!-- Crosshair lines — right -->
+  <line x1="96" y1="64" x2="124" y2="64" stroke="#0A66C2" stroke-width="7" stroke-linecap="round" />
+
+  <!-- Target node — the "found person" dot, slightly offset to suggest discovery -->
+  <circle cx="72" cy="56" r="10" fill="#0A66C2" />
+</svg>

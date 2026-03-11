@@ -1,0 +1,52 @@
+{
+  "manifest_version": 3,
+  "name": "LinkScout — Smart LinkedIn Networking Assistant",
+  "version": "0.1.0",
+  "description": "Find the right people to network with on LinkedIn. Scores profiles by relevance, activity, and reply likelihood.",
+
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "alarms"
+  ],
+
+  "host_permissions": [
+    "*://*.linkedin.com/*"
+  ],
+
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.linkedin.com/*"],
+      "js": [
+        "content/navigator.js",
+        "content/extractor.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none';"
+  }
+}
