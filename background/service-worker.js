@@ -124,6 +124,34 @@ function todayDateString() {
   return new Date().toISOString().slice(0, 10);
 }
 
+/**
+ * Build keyword terms used to pre-filter search results cards.
+ * Keeps terms compact and unique to avoid noisy matching.
+ * @param {Object} config
+ * @returns {string[]}
+ */
+function buildSearchKeywordTerms(config) {
+  const terms = new Set();
+
+  for (const company of (config.targetCompanies || [])) {
+    const value = String(company || '').trim().toLowerCase();
+    if (value) {
+      terms.add(value);
+    }
+  }
+
+  for (const role of (config.targetRoles || [])) {
+    const words = String(role || '').toLowerCase().split(/\s+/).filter(Boolean);
+    for (const word of words) {
+      if (word.length >= 3) {
+        terms.add(word);
+      }
+    }
+  }
+
+  return [...terms];
+}
+
 /* ===================================================================
    TAB MANAGEMENT
    =================================================================== */
@@ -207,12 +235,12 @@ chrome.alarms.onAlarm.addListener((alarm) => {
  * @param {number} tabId
  * @returns {Promise<string[]>}
  */
-async function collectProfileUrls(tabId) {
+async function collectProfileUrls(tabId, keywordTerms = []) {
   try {
     const results = await chrome.scripting.executeScript({
       target: { tabId },
       func: collectProfileUrlsInjected,
-      args: [MAX_PROFILES_PER_SEARCH_PAGE, SEARCH_SCROLL_DELAY_MS]
+      args: [MAX_PROFILES_PER_SEARCH_PAGE, SEARCH_SCROLL_DELAY_MS, keywordTerms]
     });
     if (results && results[0] && Array.isArray(results[0].result)) {
       return results[0].result;
@@ -229,7 +257,7 @@ async function collectProfileUrls(tabId) {
  * @param {number} scrollDelay
  * @returns {Promise<string[]>}
  */
-async function collectProfileUrlsInjected(maxUrls, scrollDelay) {
+async function collectProfileUrlsInjected(maxUrls, scrollDelay, keywordTerms) {
   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   await new Promise((r) => setTimeout(r, scrollDelay));
 
@@ -237,17 +265,30 @@ async function collectProfileUrlsInjected(maxUrls, scrollDelay) {
   const seen = new Set();
   const urls = [];
 
+  const terms = (Array.isArray(keywordTerms) ? keywordTerms : [])
+    .map((t) => String(t || '').toLowerCase().trim())
+    .filter(Boolean);
+
   for (const link of links) {
     const href = link.href || '';
     const match = href.match(/(https:\/\/www\.linkedin\.com\/in\/[a-zA-Z0-9_-]+)/);
-    if (match) {
-      const normalized = match[1].replace(/\/$/, '');
-      if (!seen.has(normalized)) {
-        seen.add(normalized);
-        urls.push(normalized);
-        if (urls.length >= maxUrls) {
-          break;
-        }
+    if (!match) {
+      continue;
+    }
+
+    const card = link.closest('li, .reusable-search__result-container, .entity-result, .search-result') || link;
+    const cardText = (card.textContent || '').toLowerCase();
+    const hasKeywordHit = terms.length === 0 || terms.some((term) => cardText.includes(term));
+    if (!hasKeywordHit) {
+      continue;
+    }
+
+    const normalized = match[1].replace(/\/$/, '');
+    if (!seen.has(normalized)) {
+      seen.add(normalized);
+      urls.push(normalized);
+      if (urls.length >= maxUrls) {
+        break;
       }
     }
   }
@@ -556,7 +597,8 @@ async function runScanLoop(isResume = false) {
         currentQuery: query.label
       });
 
-      const profileUrls = await collectProfileUrls(tabId);
+      const searchKeywordTerms = buildSearchKeywordTerms(config);
+      const profileUrls = await collectProfileUrls(tabId, searchKeywordTerms);
 
       /* === Inner loop: profiles === */
       const startPi = (isResume && qi === startQi)
@@ -628,7 +670,7 @@ async function runScanLoop(isResume = false) {
           title: profileData.headline || '',
           company: profileData.currentCompany || '',
           location: profileData.location || '',
-          profileUrl: profileData.profileUrl || profileUrl,
+          profileUrl: (profileData.profileUrl || profileUrl || '').replace(/\/$/, ''),
           score: scoreResult.totalScore,
           signals: {
             isAlumni: profileData.education?.isAlumni || false,
